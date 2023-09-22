@@ -1,6 +1,6 @@
 /*
  * Basic responsive mashup template
- * @owner Enter you name here (xxx)
+ * @owner Bruno Felix (Decisions)
  */
 /*
  *    Fill in host and port for Qlik engine
@@ -35,20 +35,85 @@ require( ["js/qlik"], function ( qlik ) {
 	function function_percent_1(reply, app){console.log(reply)}
 
 	function function_pizza(reply, app){
-		//console.log(reply)
-		const data = reply.qHyperCube.qDataPages[0].qMatrix
+		console.log(reply)
+		let data = reply.qHyperCube.qDataPages[0].qMatrix
+		data = data.slice().sort((a,b) => {
+			const valueA = a[1].qText;
+			const valueB = b[1].qText;
+
+			return valueB - valueA
+		})
 		//console.log(`${data[0][0].qText} = ${data[0][1].qText}`)
+		
+		const pieText = [];
+		const pieValue = [];
 		
 		//exibe cada elemento do array data
 		$.each(data,function(k, val){
 			console.log(`${val[0].qText} = ${val[1].qText}`)
-			$("#hypercube").append('<tr><td>'+ val[0].qText + '</td>' + '<td>' + val[1].qText + '</td></tr>');
+			//$("#hypercube").append('<tr><td>'+ val[0].qText + '</td>' + '<td>' + val[1].qText + '</td></tr>');
+			pieText.push(`${val[0].qText}`)
+			pieValue.push(`${val[1].qText}`)
 		})
 		
-		const ctx = document.getElementById("hypercube2");
+		console.log(pieText)
+		console.log(pieValue)
+
+		//$("#hypercube2").append('<p> Teste </p>')
 		
-		ctx.append('<h1> Teste </h1>');
-  
+		//const ctx = document.getElementById("hypercube2");
+		
+		//ctx.append('<h1> Teste </h1>');
+  		//ctx.innerHTML('<p> Teste </p>');
+		//ctx.appendChild("<div> Texto </div>");
+		
+		  const ctx2 = document.getElementById('pie');
+          
+          new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: pieText,
+                datasets: [{
+                    label: 'Quantidade',
+                    data: pieValue,
+                    backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'blueViolet',
+					'blue',
+                    'purple',
+                    'yellow',
+                    'red',
+                    'orange',
+                    'sienna',
+                    'silver',
+                    'chartreuse',
+                    'darkgreen',
+                    'darkred',
+					'darkorange',
+                    'rgb(54, 962, 935)',
+                    'darkred',
+                    'darkviolet',
+                    'blue',
+                    'green',
+                    'yellow',
+                    ],
+                    hoverOffset: 30,
+					borderColor: 'transparent'
+                }]
+            },
+            options: {
+              plugins:{
+				  legend: {
+				  	display: false,
+					labels: {
+					  color: 'white'
+					}
+				  }
+			  }
+            }
+          })
+		
 	}
 
 
